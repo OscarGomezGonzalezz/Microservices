@@ -1,0 +1,7 @@
+Docker es como un coche que te lleva de un lugar a otro (es el contenedor).
+
+Kubernetes es como un conjunto de carreteras y señales de tráfico que gestionan una red de coches en movimiento
+(es la orquestación de contenedores).
+
+Así, Kubernetes te ayuda a gestionar y coordinar los coches (contenedores) en una gran ciudad (el clúster), asegurando
+que lleguen a su destino, evitando que se detengan o se atasquen en el camino, y escalando el número de coches según la demanda.
