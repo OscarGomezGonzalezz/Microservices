@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: frontend-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: "letsencrypt-prod" #Usa el ClusterIssuer que configuramos.
+spec:
+  ingressClassName: nginx
+  tls: #Asigna el certificado TLS para el dominio tuapp.com almacenado en el Secret llamado frontend-tls.
+    - hosts:
+        - localhost
+      secretName: frontend-tls
+  rules:
+    - host: tuapp.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 80

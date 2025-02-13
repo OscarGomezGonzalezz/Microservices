@@ -1,16 +1,42 @@
+#backend-policy: Solo permite tráfico al backend desde el frontend.
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: allow-frontend-to-backend
-  namespace: default  # Asegúrate de usar el namespace correcto
+  name: backend-policy
+  namespace: default
 spec:
   podSelector:
     matchLabels:
-      app: backend  # Aplica a los pods con esta etiqueta
+      app: backend
+  policyTypes:
+    - Ingress
   ingress:
     - from:
         - podSelector:
             matchLabels:
-              app: frontend  # Permite solo el acceso desde los pods del frontend
-#todas las comunicaciones entre los pods estarán permitidas por defecto. Si aplicas una NetworkPolicy, 
-#solo los flujos de red permitidos serán aceptados, y los demás serán bloqueados.
+              app: frontend
+      ports:
+        - protocol: TCP
+          port: 3000
+
+---
+#mongo-policy: Solo permite conexiones de MongoDB desde el backend
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mongo-policy
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: mongo
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: backend
+      ports:
+        - protocol: TCP
+          port: 27017
