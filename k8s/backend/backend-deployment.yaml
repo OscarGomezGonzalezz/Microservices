@@ -14,6 +14,7 @@ spec:
       labels:
         app: backend
     spec:
+      serviceAccountName: backend-service-account  # nombre del service account(no su ruta)
       containers:
       - name: backend
         image: oscargomezgonzalezz/backend:v6

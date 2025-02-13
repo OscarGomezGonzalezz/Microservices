@@ -5,7 +5,7 @@ metadata:
   labels:
     app: frontend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: frontend
@@ -14,8 +14,9 @@ spec:
       labels:
         app: frontend
     spec:
+      serviceAccountName: frontend-service-account  # Asociar el frontend con el ServiceAccount
       containers:
-      - name: frontend
-        image: tuusuario/frontend:v1
-        ports:
-        - containerPort: 80
+        - name: frontend
+          image: oscargomezgonzalezz/frontend:v7
+          ports:
+            - containerPort: 80

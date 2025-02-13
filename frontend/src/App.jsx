@@ -7,12 +7,30 @@ function App() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
+    //TODO: FIX THAT SERVER MAY SEND INDEX.HTML INSTEAD OF THE ACTUAL ANSWER WHICH SHOULD BE []
     fetch("/api/data")
-      .then((res) => res.json())
-      .then((json) => setData(json.message))
-      .catch((err) => console.error(err));
+    //Desde el navegador: El fetch se realiza a http://127.0.0.1:54397/api/data (o el puerto que tenga tu dev server).
+    //Internamente, en Vite: La solicitud se intercepta y se reenvía a http://backend-service:3000/api/data.
+      .then((res) => {
+        console.log(res);  // Ver la respuesta de la API
+        return res.text();  // Obtenemos el cuerpo como texto
+      })
+      .then((text) => {
+        console.log(text);  // Ver el texto de la respuesta
+        try {
+          const json = JSON.parse(text);  // Intentar parsear el texto como JSON
+          setData(json);
+        } catch (err) {
+          console.error('Error al parsear JSON:', err);
+        }
+      })
+      .catch((err) => console.error('Error de red:', err));
   }, []);
+  
+  
 
+//Cuando el navegador carga la aplicación, lo primero que hace es descargar index.html (lo que ves en el Network tab) y 
+//luego ejecuta el código JavaScript que renderiza tu aplicación (el contenido que ves en la ventana del navegador).
   return (
     <>
       <div>

@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: backend-rolebinding
+  namespace: default  # Especifica el namespace donde se aplica
+subjects:
+  - kind: ServiceAccount
+    name: backend-service-account  # El ServiceAccount al que le damos acceso
+    namespace: default  # Asegúrate de que esté en el mismo namespace
+roleRef:
+  kind: Role
+  name: backend-role  # El Role que se asigna
+  apiGroup: rbac.authorization.k8s.io

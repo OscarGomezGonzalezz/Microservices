@@ -1,0 +1,9 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: backend-role
+  namespace: default  # Especifica el namespace donde se aplica
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services"]  # Recursos que puede gestionar el backend
+    verbs: ["get", "list", "create", "delete"]  # Operaciones permitidas

@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend-to-backend
+  namespace: default  # Asegúrate de usar el namespace correcto
+spec:
+  podSelector:
+    matchLabels:
+      app: backend  # Aplica a los pods con esta etiqueta
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: frontend  # Permite solo el acceso desde los pods del frontend
+#todas las comunicaciones entre los pods estarán permitidas por defecto. Si aplicas una NetworkPolicy, 
+#solo los flujos de red permitidos serán aceptados, y los demás serán bloqueados.

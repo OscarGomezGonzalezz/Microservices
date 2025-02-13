@@ -1,16 +1,23 @@
 # Etapa 1: Construcción de la app
 FROM node:18 AS builder
 WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm install
 COPY . .
-RUN npm install && npm run build
+RUN npm run build
 
 # Etapa 2: Servir con Nginx
 #Esta imagen se encargará de servir los archivos estáticos generados en la primera etapa
 FROM nginx:alpine
 #Aquí es donde entra el concepto de multi-stage builds: La palabra clave --from=builder le dice a Docker que copie los archivos
 #construidos desde la etapa builder y los coloque en el sitio predefinido donde nginx busca los archivos estaticos para servir
-COPY --from=builder /app/dist /usr/share/nginx/html
 
+# Crear un usuario no root con ID 1000 para mayor seguridad
+RUN addgroup -g 1000 nginx && \
+    adduser -D -u 1000 -G nginx nginx
+
+USER nginx
+COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 #Este comando ejecuta Nginx en primer plano (con daemon off;), lo que hace que el contenedor siga ejecutándose y sirviendo el sitio.
